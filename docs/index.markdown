@@ -7,6 +7,9 @@ layout: home
 
 The aim of this project is to build a flywheel that will store and release electrical energy.
 
+* first item
+{:toc}
+
 ## Introduction to flywheels
 
 The concepts used in flywheels have been around since the invention of the wheel: a flywheel is a spinning disc that stores energy through its rotation.
