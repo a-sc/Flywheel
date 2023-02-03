@@ -26,6 +26,8 @@ baseurl: "/Flywheel" # the subpath of your site, e.g. /blog
 url: "https://a-sc.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  a-sc
 
+google_analytics: UA-255463506-2
+
 # Build settings
 theme: minima
 
