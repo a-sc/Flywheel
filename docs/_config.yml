@@ -19,9 +19,9 @@
 # in the templates via {{ site.myvariable }}.
 
 title: Adrian's awesome flywheel
-email: adrian.s.c.05@gmail.com
+#email: adrian.s.c.05@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-A DIY demonstrator of flywheel energy storage, including detailed descriptions of mechanics, electronics and firmware. See the [github repo](https://github.com/a-sc/Flywheel) for design files and firmware source.
+ A DIY demonstrator of flywheel energy storage, including detailed descriptions of mechanics, electronics and firmware. See https://github.com/a-sc/Flywheel for design files and firmware source.
 baseurl: "/Flywheel" # the subpath of your site, e.g. /blog
 url: "https://a-sc.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  a-sc
