@@ -60,7 +60,7 @@ the motor, interleaved at regular intervals with the three windings in the
 stator. This means an angular separation of 120° between Hall sensors and 60°
 between any Hall sensor and its closest coil either side.
 
-![](../assets/images/dummy.png)
+![](../assets/images/Stator.jpg)
 *A close-up view of the placement of the Hall sensors in the stator*
 
 The orientation of the Hall sensors is chosen to produce a negative-going signal
@@ -71,14 +71,14 @@ one produced by the magnets). In order to get a proper 0V or 3.3V signal I can
 send to the MCU, I condition the signals coming from the sensors using a simple
 LM339 comparator with a bit of hysteresis.
 
-![](../assets/images/dummy.png)
+![](../assets/images/Comparator.jpg)
 *Picture of the comparator circuit (Todo: post full schematics)*
 
 This short video shows the signals I get in the oscilloscope as I turn the rotor
 manually, making each of the Hall sensors see alternate north and south poles:
 
-<iframe width="800" height="450" src="https://www.youtube.com/embed/cDphUib5iG4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-*Testing Hall sensor output*
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Yc3aZQofmLY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+*Testing Hall sensor output (you can see the signal stretch in time as the rotor slows down)*
 
 ## Connection tables
 
@@ -86,7 +86,7 @@ They say a picture is sometimes worth more than a thousand words. Well, not in
 this case! As you can see in the picture below, it is quite hard to discern the
 connections in the unholy mess of wires:
 
-![](../assets/images/dummy.png)
+![](../assets/images/NucleoSTM32MotorBoard.jpg)
 *The Nucleo STM32 board connected to the IFX007T motor shield*
 
 Here's a connection table to make sense of the wiring. Please refer to the
