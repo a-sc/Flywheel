@@ -13,3 +13,7 @@ curious about its shape but not enough to install KiCad, here it is for your
 viewing pleasure:
 
 ![](../../docs/assets/images/flywheel_plate.png)
+
+The holes in the periphery allow increasing the moment of inertia (and hence the
+stored energy for a given rotational speed) by adding nuts and bolts all around
+the flywheel.
