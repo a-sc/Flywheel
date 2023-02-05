@@ -219,7 +219,7 @@ void EXTI9_5_IRQHandler(void)
 			  speed = TIM_GetCounter(TIM3);
 				// calc speed
 			  if (TIM_GetITStatus(TIM3, TIM_IT_Update)) { 
-			    speed = -1;
+			    speed = 65535;
 			    TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
 			  }
 				
