@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Adrian's awesome flywheel
+title: Flywheel energy storage
 #email: adrian.s.c.05@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
  A DIY demonstrator of flywheel energy storage, including detailed descriptions of mechanics, electronics and firmware. See https://github.com/a-sc/Flywheel for design files and firmware source.
