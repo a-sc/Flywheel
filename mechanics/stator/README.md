@@ -1,0 +1,3 @@
+#3D models used for the stator
+
+There are 3 coils in this stator, each made up of one 3D printed coil plate and coil shaft. These two pieces are inserted together without adhesive, and the coil is spun around the shaft by hand until the wire reaches the edge of the plate. The central part of the stator is used to provide support for the point of the rod. It is designed to fit right into the middle of the stator body, which has two sets of 3 towers equidistant to the center. The closer towers are where the hall sensors are placed, whilst the furthest towers house the coils. If you want to know more about it, visit the [website](https://a-sc.github.io/Flywheel).
