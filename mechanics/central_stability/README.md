@@ -1,3 +1,3 @@
-#3D models used for centering of the flywheel
+# 3D models used for centering of the flywheel
 
 Here are the three 3D models used to build the centering system of the flywheel. The adapter plate is inserted into where the head of the tripod originally was, and fixed in place with the nut. Then, magnets are aligned from the bottom plate to the top plate using a screw and a spacer, as well as a nut to close it. If you want to know more about it, visit the [website](https://a-sc.github.io/Flywheel).
