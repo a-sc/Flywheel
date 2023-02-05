@@ -1,2 +1,8 @@
 # Emacs temp files
 *~
+
+# Binaries from firmware compilation
+firmware/bin/
+firmware/main.bin
+firmware/main.elf
+firmware/main.hex
