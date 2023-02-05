@@ -23,4 +23,6 @@ The project is built around a Manfrotto compact action tripod that will be used 
 
 The flywheel is therefore supported vertically. In order to support the weight of the tube, a sharp end is added at the bottom. This sharp end is placed on metal in order to minimize energy loss due to friction. Vertical alignment is ensured thanks to a circular magnet fitted into the tube. All around this magnet are repelling magnets that ensure that the tube stays perfectly vertical and does not drift from side to side.
 
-A homemade brushless motor is used to store and extract energy from the flywheel. It consists of a rotor and a stator which are explained in depth in [insert link here](link).
+A homemade brushless motor is used to store and extract energy from the
+flywheel. It consists of a rotor and a stator which are explained in depth in
+[the mechanics page](mechanics.md).
