@@ -83,3 +83,29 @@ the PI controller.
 
 ## Proportional Integral (PI) control
 
+In PI control, the system continuously measures the controlled variable (in this
+case rotational speed) and derives an error signal from it by subtracting the
+measured speed from the set point (the speed the user wants). This error signal
+is then fed to the controller, which produces a duty cycle for the PWM signals.
+
+In steady state, the error is close to zero, so if we only used proportional
+control (i.e. having the duty cycle be proportional to the error) the system
+would oscillate back and forth around the set point. The duty cycle would go to
+zero when the speed were reached, which would make the speed go down, then the
+error go up, then the duty cycle go up and so forth. By having an integral
+branch in the controller, added to the proportional branch to generate the duty
+cycle output, we can have a non-zero output even when the system is locked at
+the right speed, which is exactly what we want.
+
+Both the proportional and the integral branch of the controller have their own
+gains. These are multiplicative constants, customarily named k<sub>p</sub> and
+k<sub>i</sub>, which the user can set to fine-tune the dynamics of the feedback
+system.
+
+I mention all this because one of the slight tweaks I had to do on the firmware
+side was to adjust the value of k<sub>p</sub>. In the internal integer
+representation of the error in the PI controller, one rpm corresponds to 68
+counts. If I wanted the proportional part to provide a correction signal when
+the error was 1 rpm, then I had to push k<sub>p</sub> to a value of 200, so its
+contribution would not disappear due to some scaling (right shift) done inside
+the code.
