@@ -24,11 +24,14 @@ magnets, therefore avoiding any physical contact.
 The video below gives you an idea of what the system looks like when in action.
 You will find more in-depth information in the rest of the site.
 
-Insert video here.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/k8Cg9cRpWMs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-Site navigation hints:
+
+## Site navigation hints
 
 * Get all stable material using the navigation bar at the top (or the drop-down
   menu if you are using a small screen).
 * Get more "volatile" material in the list of posts below.
-* The design files and firmware source can be found in the [github repo](https://github.com/a-sc/Flywheel).
+* The design files and firmware source can be found in the [github
+  repo](https://github.com/a-sc/Flywheel). Ongoing work and future plans are
+  documented in the [issues](https://github.com/a-sc/Flywheel/issues).
