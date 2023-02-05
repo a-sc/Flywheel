@@ -19,7 +19,8 @@ Starting from the bottom, the project needs a moveable flat surface to facilitat
 
 On top of the base goes the stator. It is almost entirely 3D printed, and all the 3D models can be found [here](https://github.com/a-sc/Flywheel/tree/main/mechanics/stator). A [large m8 stainless steel washer](https://www.amazon.fr/Rondelles-Carrosserie-Inoxydable-Carrossier-ext%C3%A9rieur/dp/B0B6BS663W/ref=sr_1_25_sspa?__mk_fr_FR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=2RNZMAKP9CCT2&keywords=rondelle%2Bm8&qid=1673488716&s=industrial&sprefix=rondelle%2Bm8%2Cindustrial%2C99&sr=1-25-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9tdGY&th=1) with an outer diameter of anywhere from 25-40mm is stuck to the bottom of the "Stator central part" model.
 
-<img src="https://github.com/a-sc/Flywheel/blob/main/docs/assets/images/StatorCenter.jpg"  width="300" height="270">
+
+![](assets/images/StatorCenter.jpg){:height="270px" width="300px"}
 *Underside of the stator central part*
 
 This is where the point of the rod will spin. This part is placed in the middle of the wooden plate, and around it goes the "Stator body".
@@ -41,12 +42,12 @@ On the rod, at the same level as the stator, is the rotor. The 3D model can be f
 
 The rotor has 8 holes in which to put magnets. The more powerful magnets are used, and have to be placed in alternating polarities (north/south/north/south).
 
-<img src="https://github.com/a-sc/Flywheel/blob/main/docs/assets/images/Rotor.jpg"  width="300" height="225">
+![](assets/images/Rotor.jpg){:height="225px" width="300px"}
 *Rotor on the threaded rod*
 
 The flywheel that I used is a [relatively thin fiberglass disc with a radius of around 10cm](https://github.com/a-sc/Flywheel/tree/main/mechanics/flywheel_plate) and is placed slightly above the rotor. Screws are added around the outside of the flywheel to increase the moment of inertia, and the flywheel is inserted into the steel tube and fixed in place with nuts. 
 
-<img src="https://github.com/a-sc/Flywheel/blob/main/docs/assets/images/Flywheel.jpg"  width="300" height="225">
+![](assets/images/Flywheel.jpg){:height="225px" width="300px"}
 *The flywheel I used*
 
 In reality, any homogenous disc that fits the m8 threaded rod more or less well can be used. It does, however, need to fit inside of the tripod legs, so the diameter cannot be too large.
