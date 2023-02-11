@@ -456,8 +456,8 @@ struct bldc_state bldc;
   
   for(;;)
   {
-    pp_printf("HM: %d h0 %d h2 %d h3 %d phase %d speed %d valid %d duty %d speedSetP %d\n", bldc.hall_step_missed,
-      bldc.hall_pulses[0], bldc.hall_pulses[1], bldc.hall_pulses[2], bldc.hall_phase,
+    pp_printf("HM: %d hU %d hV %d hW %d phase %d speed %d valid %d duty %d speedSetP %d\n", bldc.hall_step_missed,
+      bldc.hall_pulses[1], bldc.hall_pulses[2], bldc.hall_pulses[0], bldc.hall_phase,
       (bldc.speed_raw * 60) >> 12, bldc.speed_raw_valid, bldc.pwm_duty,
       (bldc.speed_setpoint * 60) >> 12
     );

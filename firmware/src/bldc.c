@@ -197,9 +197,9 @@ void bldc_pwm_init(struct bldc_state *dev)
 
 void EXTI9_5_IRQHandler(void)
 {
-	int s1 = EXTI_GetITStatus(EXTI_Line6);
-	int s2 = EXTI_GetITStatus(EXTI_Line8);
-	int s3 = EXTI_GetITStatus(EXTI_Line9);
+        int s1 = EXTI_GetITStatus(EXTI_Line6); // W
+	int s2 = EXTI_GetITStatus(EXTI_Line8); // U
+	int s3 = EXTI_GetITStatus(EXTI_Line9); // V
 
 	if (s1 || s2 || s3)
 	{
@@ -242,11 +242,11 @@ void EXTI9_5_IRQHandler(void)
 			}
 
 			if (s1)
-				g_bldc->hall_pulses[0]++;
+			  g_bldc->hall_pulses[0]++; //W
 			if (s2)
-				g_bldc->hall_pulses[1]++;
+			  g_bldc->hall_pulses[1]++; //U
 			if (s3)
-				g_bldc->hall_pulses[2]++;
+			  g_bldc->hall_pulses[2]++; //V
 		}
 	}
 }
@@ -270,7 +270,7 @@ void bldc_hall_init(struct bldc_state *dev)
 
 	// Init NVIC
 	nvic_s.NVIC_IRQChannel = EXTI9_5_IRQn;
-	nvic_s.NVIC_IRQChannelPreemptionPriority = 0x00;
+	nvic_s.NVIC_IRQChannelPreemptionPriority = 0x00; //highest priority
 	nvic_s.NVIC_IRQChannelSubPriority = 0x00;
 	nvic_s.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&nvic_s);
