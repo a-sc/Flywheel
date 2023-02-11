@@ -13,9 +13,12 @@
 #include "bldc.h"
 #include "dsp_math.h"
 
+#define USE_TIM10_IRQ 0
+
 static volatile struct bldc_state *g_bldc = NULL;
 
-// currently unised
+#if USE_TIM10_IRQ
+// currently unused
 void TIM1_UP_TIM10_IRQHandler(void)
 {
 	if (TIM_GetITStatus(TIM1, TIM_IT_Update) != RESET)
@@ -23,6 +26,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
 		TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
 	}
 }
+#endif
 
 static inline int bldc_read_hall_state(struct bldc_state *dev)
 {
@@ -175,7 +179,7 @@ void bldc_pwm_init(struct bldc_state *dev)
 
 	// TIM_ClearFlag(TIM1, TIM_IT_CC1);
 	// TIM_ITConfig(TIM1, TIM_IT_CC1, ENABLE);
-
+        #if USE_TIM10_IRQ
 	/* Enable the TIM1_IRQn Interrupt */
 	NVIC_InitTypeDef nvic_s;
 	nvic_s.NVIC_IRQChannel = TIM1_UP_TIM10_IRQn;
@@ -184,6 +188,7 @@ void bldc_pwm_init(struct bldc_state *dev)
 	nvic_s.NVIC_IRQChannelSubPriority = 0;
 	nvic_s.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&nvic_s);
+	#endif
 
 	TIM_Cmd(TIM1, ENABLE);
 	// enable motor timer main output (the bridge signals)
