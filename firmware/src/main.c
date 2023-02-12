@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/stat.h>
 
 #include "stm32f4xx_conf.h"
 #include "stm32f4xx.h"
@@ -19,18 +20,76 @@ int is_touchdown();
 void hv_init();
 void esc_throttle_set(float value);
 
+extern volatile int key_pressed;
+extern int __end__;
 
+int _write(int handle, char *data, int size ) 
+{
+    int count ;
+
+    for( count = 0; count < size; count++) 
+    {
+      usart_send(data++, 1) ;  // Your low-level output function here.
+    }
+
+    return count;
+}
+
+int _fstat(int file, struct stat *st) {
+  st->st_mode = S_IFCHR;
+
+  return 0;
+}
+
+int _close(int file) {
+  return -1;
+}
+
+int _lseek(int file, int ptr, int dir) {
+  return 0;
+}
+
+int _read (int file, char * ptr, int len) {
+  int read = 0;
+
+  /*  if (file != 0) {
+    return -1;
+    }*/
+
+  read = usart_recv(ptr, len, 1);
+  return read;
+}
+
+int _isatty(int file) {
+  return 1;
+}
+
+
+
+void *_sbrk(int incr) {
+  static unsigned char *heap = NULL;
+  unsigned char *prev_heap;
+
+  if (heap == NULL) {
+    heap = (unsigned char *)&__end__;
+  }
+  prev_heap = heap;
+
+  heap += incr;
+
+  return prev_heap;
+}
 
 void clock_info()
 {
     RCC_ClocksTypeDef rcc;
     RCC_GetClocksFreq(&rcc);
 
-    pp_printf("SWS: %d\n\r", rcc.sws);
-    pp_printf("SYSCLK: %d Hz\n\r", rcc.SYSCLK_Frequency);
-    pp_printf("AHB: %d Hz\n\r", rcc.HCLK_Frequency);
-    pp_printf("APB1: %d Hz\n\r", rcc.PCLK1_Frequency);
-    pp_printf("APB2: %d Hz\n\r", rcc.PCLK2_Frequency);
+    printf("SWS: %d\n\r", rcc.sws);
+    printf("SYSCLK: %d Hz\n\r", rcc.SYSCLK_Frequency);
+    printf("AHB: %d Hz\n\r", rcc.HCLK_Frequency);
+    printf("APB1: %d Hz\n\r", rcc.PCLK1_Frequency);
+    printf("APB2: %d Hz\n\r", rcc.PCLK2_Frequency);
 }
 
 //void esc_pulse_handler()
@@ -141,7 +200,7 @@ void handle_kb()
 
     if(new_setting)
     {
-      pp_printf("sp: %d\n\r", setpoint);
+      printf("sp: %d\n\r", setpoint);
       servo_set_setpoint(setpoint);
     }
   }
@@ -169,7 +228,7 @@ void cmd_adc_test(struct rpc_request *rq)
 void cmd_esc_set_speed(struct rpc_request *rq)
 {
   float speed = (float) rpc_pop_int32(rq) / 1000.0;
-  pp_printf("SetSpeed: %d\n", (int)speed);
+  printf("SetSpeed: %d\n", (int)speed);
   esc_set_speed( speed );
 }
 
@@ -215,7 +274,7 @@ void cmd_profile_height(struct rpc_request *rq)
 {
   int initial_setpoint = rpc_pop_int32(rq);
   int n_points = rpc_pop_int32(rq);
-  pp_printf("initial_setp %d np %d\n", initial_setpoint, n_points);
+  printf("initial_setp %d np %d\n", initial_setpoint, n_points);
   servo_set_target(initial_setpoint, 1);
   while(!servo_position_ready());
   int i;
@@ -288,7 +347,7 @@ void cmd_servo_set_heightmap(struct rpc_request *rq)
   for(i=0;i<180;i++)
   {
     int h=rpc_pop_int32(rq);
-    pp_printf("ang %d h %d\n\r", i, h);
+    printf("ang %d h %d\n\r", i, h);
     servo_heightmap_set(i, h);
   }
 }
@@ -298,7 +357,7 @@ void cmd_servo_enable_heightmap(struct rpc_request *rq)
   int enable = rpc_pop_int32(rq);
   int height = rpc_pop_int32(rq);
 
-  pp_printf("hmap-enable %d %d\n\r",enable,height);
+  printf("hmap-enable %d %d\n\r",enable,height);
   if(!enable)
   {
     servo_set_setpoint(height);
@@ -336,7 +395,7 @@ void cmd_probe_and_etch(struct rpc_request *rq)
 
   int p = probe_single(initial_setpoint);
 
-  pp_printf("ProbeEtch:%d\n\r", p);
+  printf("ProbeEtch:%d\n\r", p);
   servo_set_target(p+d, 15);
   while(!servo_position_ready());
 
@@ -362,7 +421,7 @@ void main_loop()
     //pp_printf("touch %d\n\r", is_touchdown());
     if(tmo_hit(&keepalive))
     {
-      pp_printf("Heartbeat etch-irq %d\n", hv_irq_count());
+      printf("Heartbeat etch-irq %d\n", hv_irq_count());
       //pp_printf("servo %d %d\n\r", servo_get_sensor(), servo_get_setpoint());
     }
 
@@ -421,6 +480,7 @@ int main(void)
 
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
+    key_pressed = 0;
     usart_init();
 
 
@@ -443,7 +503,7 @@ struct bldc_state bldc;
    bldc.reverse_hall_phase = 1;
    bldc.hall_phase_advance = 1;
 
-  pp_printf("Start\n");
+  printf("Start\n");
   delay(100);
 
    bldc_start(&bldc);
@@ -456,26 +516,30 @@ struct bldc_state bldc;
   
   for(;;)
   {
-    pp_printf("HM: %d hU %d hV %d hW %d phase %d speed %d valid %d duty %d speedSetP %d\n", bldc.hall_step_missed,
+    printf("HM: %d hU %d hV %d hW %d phase %d speed %d valid %d duty %d speedSetP %d\n", bldc.hall_step_missed,
       bldc.hall_pulses[1], bldc.hall_pulses[2], bldc.hall_pulses[0], bldc.hall_phase,
       (bldc.speed_raw * 60) >> 12, bldc.speed_raw_valid, bldc.pwm_duty,
       (bldc.speed_setpoint * 60) >> 12
     );
+    if (key_pressed) {
+      printf("Key pressed\n");
+      key_pressed = 0;
+    }
     delay(500);
   }
     esc_init();
     float speed = 0.1;
     esc_throttle_set(0.5);
-    pp_printf("Crank up\n");
+    printf("Crank up\n");
     delay(3000);
-    pp_printf("Crank up done\n");
+    printf("Crank up done\n");
     
     for(int i = 0; i < 100;i++)
     {
       esc_throttle_set(speed);
       speed += 0.01;
       delay(500);
-      pp_printf(".");
+      printf(".");
     }
 
     //esc_set_speed(10.0);

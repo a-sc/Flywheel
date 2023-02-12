@@ -4,6 +4,8 @@
 
 static volatile usart_fifo_t tx_fifo, rx_fifo;
 
+volatile int key_pressed = 0;
+
 void usart_init()
 {
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
@@ -73,9 +75,10 @@ int puts(const char *s)
 
 void USART2_IRQHandler(void)
 {
-  if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+  if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) {
     usart_fifo_push(&rx_fifo, USART_ReceiveData(USART2) & 0xff);
-
+    key_pressed = 1;
+  }
   if (USART_GetITStatus(USART2, USART_IT_TXE) != RESET)
   {
   
