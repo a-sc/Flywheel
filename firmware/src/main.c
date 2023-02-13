@@ -20,8 +20,7 @@ int is_touchdown();
 void hv_init();
 void esc_throttle_set(float value);
 
-extern volatile int key_pressed;
-extern int __end__;
+extern int __end__; /* From linker script */
 
 int _write(int handle, char *data, int size ) 
 {
@@ -480,7 +479,6 @@ int main(void)
 
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
-    key_pressed = 0;
     usart_init();
 
 
@@ -521,10 +519,7 @@ struct bldc_state bldc;
       (bldc.speed_raw * 60) >> 12, bldc.speed_raw_valid, bldc.pwm_duty,
       (bldc.speed_setpoint * 60) >> 12
     );
-    if (key_pressed) {
-      printf("Key pressed\n");
-      key_pressed = 0;
-    }
+    
     delay(500);
   }
     esc_init();
