@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "pp-printf.h"
 #include "stm32f4xx.h"
 #include "usart.h"
@@ -131,18 +132,28 @@ int usart_poll()
 int usart_recv(uint8_t *buf, int count, int blocking)
 {
   int n = 0;
+  uint8_t char_read;
+  // printf("usart_recv called with count=%d\n", count);
   while (n < count)
   {
     if (rx_fifo.count)
     {
       NVIC_DisableIRQ(USART2_IRQn);
-      buf[n] = usart_fifo_pop(&rx_fifo);
+      char_read = usart_fifo_pop(&rx_fifo);
+      if (char_read == '\r')
+	buf[n] = '\n';
+      else
+        buf[n] = char_read;
       NVIC_EnableIRQ(USART2_IRQn);
       n++;
+      // printf("One char read: 0x%x\n", char_read);
+      if (char_read == '\r')
+	 break;
     }
     else if (!blocking)
       break;
   }
+  // printf("usart_recv returning %d\n", n);
   return n;
 }
 

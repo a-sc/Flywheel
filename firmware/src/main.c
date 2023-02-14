@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
 
 #include "stm32f4xx_conf.h"
@@ -494,18 +495,27 @@ int main(void)
    // bldc_init( TIM3, NULL );
    
 struct bldc_state bldc;
+ char command[100];
 
-   bldc_init(&bldc);
-
-   bldc.speed_setpoint = 100<<9; 
-   bldc.reverse_hall_phase = 1;
-   bldc.hall_phase_advance = 1;
-
-  printf("Start\n");
-  delay(100);
-
-   bldc_start(&bldc);
-   //delay(10000);
+ for(;;){
+   scanf("%s", command);
+   // printf("scanf done\n");
+   // printf("scanf read the following string: %s\n", command);
+   if (!strcmp(command, "start")) {
+     bldc_init(&bldc);
+     bldc.speed_setpoint = 100<<9; 
+     bldc.reverse_hall_phase = 1;
+     bldc.hall_phase_advance = 1;
+     printf("Start\n");
+     delay(100);
+     bldc_start(&bldc);
+   }
+   else if (!strcmp(command, "stop"))
+     bldc_init(&bldc);
+   else
+     printf("Invalid command\n");
+ }
+      //delay(10000);
 
   //bldc.state = BLDC_STATE_OFF;
 
