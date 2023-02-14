@@ -34,5 +34,6 @@ struct bldc_state
 };
 
 void bldc_init( struct bldc_state *dev );
+void bldc_start(struct bldc_state *dev);
 
 #endif

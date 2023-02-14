@@ -34,7 +34,7 @@ static int gen_dither( int pi_shift )
 }
 
 
-int pi_update(pi_state_t *pi, int x)
+int pi_update(volatile pi_state_t *pi, int x)
 {
 	int64_t i_new;
 	int y;

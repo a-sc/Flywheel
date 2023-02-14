@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_gpio.h"
@@ -17,6 +18,10 @@
 
 static volatile struct bldc_state *g_bldc = NULL;
 
+void bldc_commutate(volatile struct bldc_state *dev);
+void bldc_speed_timer_init(volatile struct bldc_state *dev);
+void delay ( uint32_t how_much );
+
 #if USE_TIM10_IRQ
 // currently unused
 void TIM1_UP_TIM10_IRQHandler(void)
@@ -28,7 +33,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
 }
 #endif
 
-static inline int bldc_read_hall_state(struct bldc_state *dev)
+static inline int bldc_read_hall_state(volatile struct bldc_state *dev)
 {
 	uint32_t gpio = GPIO_ReadInputData(GPIOB);
 
@@ -39,7 +44,7 @@ static inline int bldc_read_hall_state(struct bldc_state *dev)
 	return hall_pos;
 }
 
-void bldc_hall_update_position(struct bldc_state *dev, int hall_pos)
+void bldc_hall_update_position(volatile struct bldc_state *dev, int hall_pos)
 {
 	switch (hall_pos)
 	{
@@ -195,6 +200,8 @@ void bldc_pwm_init(struct bldc_state *dev)
 	TIM_CtrlPWMOutputs(TIM1, ENABLE);
 }
 
+
+
 void EXTI9_5_IRQHandler(void)
 {
         int s1 = EXTI_GetITStatus(EXTI_Line6); // W
@@ -333,14 +340,14 @@ void bldc_start(struct bldc_state *dev)
 #define PHASE_V 0x2
 #define PHASE_W 0x4
 
-static inline void bldc_set_inhibit_n(struct bldc_state *dev, int mask_uvw)
+static inline void bldc_set_inhibit_n(volatile struct bldc_state *dev, int mask_uvw)
 {
 	GPIO_WriteBit(GPIOA, GPIO_Pin_7, (mask_uvw & PHASE_U) ? 1 : 0);
 	GPIO_WriteBit(GPIOB, GPIO_Pin_0, (mask_uvw & PHASE_V) ? 1 : 0);
 	GPIO_WriteBit(GPIOB, GPIO_Pin_1, (mask_uvw & PHASE_W) ? 1 : 0);
 }
 
-static inline void bldc_set_pwm(struct bldc_state *dev, int phases, int duty)
+static inline void bldc_set_pwm(volatile struct bldc_state *dev, int phases, int duty)
 {
 	if( phases & PHASE_U )
 		TIM1->CCR1 = duty;
@@ -350,21 +357,9 @@ static inline void bldc_set_pwm(struct bldc_state *dev, int phases, int duty)
 		TIM1->CCR3 = duty;
 }
 
-void bldc_test()
+void bldc_commutate(volatile struct bldc_state *dev)
 {
-	for(;;)
-	{
-		bldc_set_pwm(g_bldc, PHASE_W, 0 );
-		delay(100);
-		bldc_set_pwm(g_bldc, PHASE_W, 2500 );
-		delay(100);
-	}
-			
-}
 
-void bldc_commutate(struct bldc_state *dev)
-{
-	#if 1
 
 	int ph;
 	
@@ -420,52 +415,22 @@ void bldc_commutate(struct bldc_state *dev)
 			break;
 	}
 
-	
-	#if 0
-	switch (ph)
-	{
-	case 0: // Z+-
-		bldc_set_inhibit_n(dev, PHASE_U | PHASE_V);
-		bldc_set_pwm(dev, PHASE_U, 0);
-		bldc_set_pwm(dev, PHASE_V, dev->pwm_duty);
-		bldc_set_pwm(dev, PHASE_W, 0);
-		break;
-	case 1: // +Z-
-		bldc_set_inhibit_n(dev, PHASE_V | PHASE_W);
-		bldc_set_pwm(dev, PHASE_U, 0);
-		bldc_set_pwm(dev, PHASE_V, dev->pwm_duty);
-		bldc_set_pwm(dev, PHASE_W, 0);
-		break;
-	case 2: // +-Z
-		bldc_set_inhibit_n(dev, PHASE_U | PHASE_W);
-		bldc_set_pwm(dev, PHASE_U, dev->pwm_duty);
-		bldc_set_pwm(dev, PHASE_V, 0);
-		bldc_set_pwm(dev, PHASE_W, 0);
-		break;
-	case 3: // Z-+
-		bldc_set_inhibit_n(dev, PHASE_U | PHASE_V);
-		bldc_set_pwm(dev, PHASE_U, dev->pwm_duty);
-		bldc_set_pwm(dev, PHASE_V, 0);
-		bldc_set_pwm(dev, PHASE_W, 0);
-		break;
-	case 4: // -Z+
-		bldc_set_inhibit_n(dev, PHASE_V | PHASE_W);
-		bldc_set_pwm(dev, PHASE_U, 0);
-		bldc_set_pwm(dev, PHASE_V, 0);
-		bldc_set_pwm(dev, PHASE_W, dev->pwm_duty);
-		break;
-	case 5: // -+Z
-		bldc_set_inhibit_n(dev, PHASE_U | PHASE_W);
-		bldc_set_pwm(dev, PHASE_U, 0);
-		bldc_set_pwm(dev, PHASE_V, 0);
-		bldc_set_pwm(dev, PHASE_W, dev->pwm_duty);
-		break;
-	}
-	#endif
-	#endif
 }
 
-void bldc_speed_timer_init(struct bldc_state *dev)
+void bldc_test()
+{
+	for(;;)
+	{
+		bldc_set_pwm(g_bldc, PHASE_W, 0 );
+		delay(100);
+		bldc_set_pwm(g_bldc, PHASE_W, 2500 );
+		delay(100);
+	}
+			
+}
+
+
+void bldc_speed_timer_init(volatile struct bldc_state *dev)
 {
 	TIM_TimeBaseInitTypeDef timer_s;
 	NVIC_InitTypeDef NVIC_InitStructure;

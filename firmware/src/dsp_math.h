@@ -40,7 +40,7 @@ void pi_init(pi_state_t *pi);
 
 /* Processes a single sample (x) with PI control algorithm
  (pi). Returns the value (y) to drive the actuator. */
-int pi_update(pi_state_t *pi, int x);
+int pi_update(volatile pi_state_t *pi, int x);
 
 void median_init( median_state_t *flt, int nsamples );
 
