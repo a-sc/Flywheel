@@ -85,11 +85,12 @@ void clock_info()
     RCC_ClocksTypeDef rcc;
     RCC_GetClocksFreq(&rcc);
 
+    printf("\r\nClock information:\r\n");
     printf("SWS: %d\n\r", rcc.sws);
-    printf("SYSCLK: %d Hz\n\r", rcc.SYSCLK_Frequency);
-    printf("AHB: %d Hz\n\r", rcc.HCLK_Frequency);
-    printf("APB1: %d Hz\n\r", rcc.PCLK1_Frequency);
-    printf("APB2: %d Hz\n\r", rcc.PCLK2_Frequency);
+    printf("SYSCLK: %d Hz\r\n", rcc.SYSCLK_Frequency);
+    printf("AHB: %d Hz\r\n", rcc.HCLK_Frequency);
+    printf("APB1: %d Hz\r\n", rcc.PCLK1_Frequency);
+    printf("APB2: %d Hz\r\n", rcc.PCLK2_Frequency);
 }
 
 //void esc_pulse_handler()
@@ -495,25 +496,35 @@ int main(void)
    // bldc_init( TIM3, NULL );
    
 struct bldc_state bldc;
- char command[100];
+ char command[100], arg1[100];
+ int speed_sp = 750;
 
  for(;;){
+   printf("\r\nEnter command: ");
    scanf("%s", command);
    // printf("scanf done\n");
    // printf("scanf read the following string: %s\n", command);
    if (!strcmp(command, "start")) {
      bldc_init(&bldc);
-     bldc.speed_setpoint = 100<<9; 
+     bldc.speed_setpoint = (speed_sp << 12)/60; 
      bldc.reverse_hall_phase = 1;
      bldc.hall_phase_advance = 1;
-     printf("Start\n");
+     //printf("Start\n\r");
      delay(100);
      bldc_start(&bldc);
    }
    else if (!strcmp(command, "stop"))
      bldc_init(&bldc);
-   else
-     printf("Invalid command\n");
+   else if (!strcmp(command, "set")) {
+       scanf("%s %d", arg1, &speed_sp);
+       if (!strcmp(arg1, "speed")) {
+	 printf("\r\nRequested speed: %d rpm\r\n", speed_sp);
+	 bldc.speed_setpoint = (speed_sp << 12) / 60;
+       } else
+	 printf("\r\nInvalid command\r\n");
+   }
+   else 
+     printf("\r\nInvalid command\r\n");
  }
       //delay(10000);
 
