@@ -8,8 +8,6 @@
  * Released according to the GNU GPL, version 2 or any later version.
  */
 
-/* spll_common.c - common data structures and functions used by the SoftPLL */
-
 #include <string.h>
 #include <stdint.h>
 

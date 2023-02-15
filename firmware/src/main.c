@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 #include "stm32f4xx_conf.h"
 #include "stm32f4xx.h"
 
@@ -16,7 +15,7 @@ void clock_info()
     RCC_GetClocksFreq(&rcc);
 
     printf("\r\nClock information:\r\n");
-    printf("SWS: %d\n\r", rcc.sws);
+    printf("SWS: %d\r\n", rcc.sws);
     printf("SYSCLK: %d Hz\r\n", rcc.SYSCLK_Frequency);
     printf("AHB: %d Hz\r\n", rcc.HCLK_Frequency);
     printf("APB1: %d Hz\r\n", rcc.PCLK1_Frequency);

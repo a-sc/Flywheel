@@ -35,5 +35,7 @@ struct bldc_state
 
 void bldc_init( struct bldc_state *dev );
 void bldc_start(struct bldc_state *dev);
+void bldc_commutate(volatile struct bldc_state *dev);
+void bldc_speed_timer_init(volatile struct bldc_state *dev);
 
 #endif

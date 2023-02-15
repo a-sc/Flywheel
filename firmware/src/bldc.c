@@ -13,14 +13,11 @@
 
 #include "bldc.h"
 #include "dsp_math.h"
+#include "common.h"
 
 #define USE_TIM10_IRQ 0
 
 static volatile struct bldc_state *g_bldc = NULL;
-
-void bldc_commutate(volatile struct bldc_state *dev);
-void bldc_speed_timer_init(volatile struct bldc_state *dev);
-void delay ( uint32_t how_much );
 
 #if USE_TIM10_IRQ
 // currently unused

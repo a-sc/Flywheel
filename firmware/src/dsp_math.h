@@ -7,7 +7,6 @@
  * Released according to the GNU GPL, version 2 or any later version.
  */
 
-/* spll_common.h - common data structures and functions used by the SoftPLL */
 
 #ifndef __DSP_MATH_H
 #define __DSP_MATH_H
