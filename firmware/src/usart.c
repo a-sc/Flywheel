@@ -1,9 +1,12 @@
 #include <stdio.h>
-#include "pp-printf.h"
+#include <sys/stat.h>
+
 #include "stm32f4xx.h"
 #include "usart.h"
 
 static volatile usart_fifo_t tx_fifo, rx_fifo;
+
+extern int __end__; /* From linker script */
 
 void usart_init()
 {
@@ -60,18 +63,6 @@ void usart_init()
   USART_Cmd(USART2, ENABLE);
 }
 
-int puts(const char *s)
-{
-  int n = 0;
-  while (*s)
-  {
-    usart_send(s, 1);
-    s++;
-    n++;
-  }
-  return n;
-}
-
 void USART2_IRQHandler(void)
 {
   uint8_t rx_data;
@@ -88,7 +79,7 @@ void USART2_IRQHandler(void)
     USART_SendData(USART2, usart_fifo_pop(&tx_fifo));
   else
     USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
-  }
+    }
 }
 
 void usart_send(const uint8_t *buf, int count)
@@ -112,21 +103,6 @@ void usart_send(const uint8_t *buf, int count)
   }
 
   USART_ITConfig(USART2, USART_IT_TXE, ENABLE);
-}
-
-void usart_tx_char(int c)
-{
-  while (usart_fifo_full(&tx_fifo))
-    ;
-
-  NVIC_DisableIRQ(USART2_IRQn);
-  usart_fifo_push(&tx_fifo, c);
-  NVIC_EnableIRQ(USART2_IRQn);
-}
-
-int usart_poll()
-{
-  return rx_fifo.count;
 }
 
 int usart_recv(uint8_t *buf, int count, int blocking)
@@ -157,10 +133,60 @@ int usart_recv(uint8_t *buf, int count, int blocking)
   return n;
 }
 
-int usart_rx_char()
-{
-  if (!rx_fifo.count)
-    return -1;
+/* Functions to support the use of printf and scanf in newlib-nano       */
+/* See https://interrupt.memfault.com/blog/boostrapping-libc-with-newlib */
+/* for details                                                           */
 
-  return usart_fifo_pop(&rx_fifo);
+int _write(int handle, char *data, int size ) 
+{
+    int count ;
+
+    for( count = 0; count < size; count++) 
+    {
+      usart_send(data++, 1) ;  // Your low-level output function here.
+    }
+
+    return count;
+}
+
+int _fstat(int file, struct stat *st) {
+  st->st_mode = S_IFCHR;
+
+  return 0;
+}
+
+int _close(int file) {
+  return -1;
+}
+
+int _lseek(int file, int ptr, int dir) {
+  return 0;
+}
+
+int _read (int file, char * ptr, int len) {
+  int read = 0;
+
+  read = usart_recv(ptr, len, 1);
+  return read;
+}
+
+int _isatty(int file) {
+  return 1;
+}
+
+
+void *_sbrk(int incr) {
+  static unsigned char *heap = NULL;
+  unsigned char *prev_heap;
+
+  if (heap == NULL) {
+    heap = (unsigned char *)&__end__;
+    /* See https://interrupt.memfault.com/blog/how-to-write-linker-scripts-for-firmware */
+    /* for an explanation of where the __end__ symbol comes from */
+  }
+  prev_heap = heap;
+
+  heap += incr;
+
+  return prev_heap;
 }

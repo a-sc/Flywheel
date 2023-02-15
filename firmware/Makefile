@@ -11,11 +11,10 @@ OBJ_DIR = bin
 vpath %.c $(PROJECT_SRC)
 vpath %.c $(STM_SRC)
 
-SRCS = main.c usart.c vsprintf-xint.c printf.c motors.c bldc.c dsp_math.c
+SRCS = main.c usart.c bldc.c dsp_math.c
 
 SRCS += Device/startup_stm32f401xe.s
 
-#SRCS += stm32f4xx_hal_msp.c
 SRCS += stm32f4xx_it.c
 SRCS += system_stm32f4xx.c
 
@@ -28,9 +27,6 @@ EXT_SRCS = stm32f4xx_rcc.c \
 	   stm32f4xx_usart.c \
 	   stm32f4xx_dma.c \
 	    misc.c
-#EXT_SRCS += stm32f4xx_hal_rcc.c
-#EXT_SRCS += stm32f4xx_hal_gpio.c
-#EXT_SRCS += stm32f4xx_hal_cortex.c
 
 EXT_OBJ = $(addprefix $(OBJ_DIR)/, $(EXT_SRCS:.c=.o))
 
