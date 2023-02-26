@@ -25,7 +25,10 @@ Cortex-M and Cortex-R processors. Once you have an output binary, you must use
 `arm-none-eabi-objcopy` to convert its format for use by `openocd`, the tool
 which flashes the binary into the STM32 through the USB interface of the Nucleo
 board. In Debian, you get these tools by installing the `gcc-arm-none-eabi`,
-`binutils-arm-none-eabi` and `openocd` packages.
+`binutils-arm-none-eabi` and `openocd` packages. In macOS, you can `brew install
+--cask gcc-arm-embedded` and `brew install open-ocd`. Then you will need a
+terminal emulator program to talk with the Nucleo board during operation. I use
+`GTKTerm` in Linux and `minicom` (also available as a `brew` formula) in macOS.
 
 ## Program structure
 
